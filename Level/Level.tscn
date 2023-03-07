@@ -1,0 +1,107 @@
+[gd_scene load_steps=8 format=3 uid="uid://drp2g2nmlupoj"]
+
+[ext_resource type="PackedScene" uid="uid://dtdpc5s41j8lj" path="res://Player/Player.tscn" id="1_gaatx"]
+[ext_resource type="Script" path="res://Level/Level.gd" id="1_k6bcx"]
+[ext_resource type="PackedScene" uid="uid://cv2tnvwm6x5kd" path="res://AI/AI.tscn" id="2_34n8m"]
+[ext_resource type="PackedScene" uid="uid://8ynq52oknbis" path="res://Ball/Ball.tscn" id="3_0f8ao"]
+[ext_resource type="AudioStream" uid="uid://dx2yhkjahk3pd" path="res://Assets/ping_pong_8bit_plop.ogg" id="5_eu314"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_njx5u"]
+size = Vector2(1280, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yjqy0"]
+size = Vector2(10, 720)
+
+[node name="Level" type="Node"]
+script = ExtResource("1_k6bcx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0784314, 0.129412, 0.14902, 1)
+
+[node name="PlayerScore" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_right = -200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Test"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AIScore" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_right = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 20
+text = "Test"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CountdownLabel" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 40
+text = "Countdown"
+horizontal_alignment = 1
+
+[node name="Player" parent="." instance=ExtResource("1_gaatx")]
+position = Vector2(75, 360)
+
+[node name="Wall Top" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall Top"]
+position = Vector2(640, -5)
+shape = SubResource("RectangleShape2D_njx5u")
+
+[node name="Wall Bottom" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall Bottom"]
+position = Vector2(640, 725)
+shape = SubResource("RectangleShape2D_njx5u")
+
+[node name="AI" parent="." instance=ExtResource("2_34n8m")]
+position = Vector2(1205, 360)
+
+[node name="Ball" parent="." instance=ExtResource("3_0f8ao")]
+position = Vector2(640, 360)
+
+[node name="Left" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
+position = Vector2(-5, 360)
+shape = SubResource("RectangleShape2D_yjqy0")
+
+[node name="Right" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
+position = Vector2(1285, 360)
+shape = SubResource("RectangleShape2D_yjqy0")
+
+[node name="Countdown" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ScoreSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_eu314")
+volume_db = -5.0
+
+[connection signal="body_entered" from="Left" to="." method="_on_left_body_entered"]
+[connection signal="body_entered" from="Right" to="." method="_on_right_body_entered"]
+[connection signal="timeout" from="Countdown" to="." method="_on_countdown_timeout"]

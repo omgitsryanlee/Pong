@@ -1,0 +1,23 @@
+extends CharacterBody2D
+
+var speed = 600
+
+func _ready():
+	randomize()
+	velocity.x = [-1,1][randi() % 2]
+	velocity.y = [-0.8,0.8][randi() % 2]
+
+func _physics_process(delta):
+	var collision = move_and_collide(velocity * speed * delta)
+	if collision:
+		velocity = velocity.bounce(collision.get_normal())
+		move_and_collide(velocity * speed * delta)
+		$CollisionSound.play()
+
+func stop_ball():
+	speed = 0
+
+func restart_ball():
+	speed = 600
+	velocity.x = [-1,1][randi() % 2]
+	velocity.y = [-0.8,0.8][randi() % 2]

@@ -1,2 +1,2 @@
 # Pong
-A simple pong game made with Godot4
+ Pong built with Godot4
